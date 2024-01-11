@@ -12,11 +12,28 @@ router.post("/loginForm", (req, res) => {
     [req.body.email],
     (err, user) => {
       if (err) throw err;
-      console.log(user);
       if (user.length == 0) {
         req.session.role = "anonim";
       } else {
-        req.session.role = user[0].role;
+        pool.query(
+          "SELECT * FROM userrole WHERE users_id = ?",
+          [user[0].id],
+          (err, role) => {
+            if (err) throw err;
+            if (role.length == 0) {
+              throw new Error("Не удалось получить права доступа.");
+            } else {
+              pool.query(
+                "SELECT * FROM permissions WHERE roles_id = ?",
+                [role[0].roles_id],
+                (err, perm) => {
+                  if (err) throw err;
+                  req.session.permission = perm[0].permissions;
+                }
+              );
+            }
+          }
+        );
       }
       res.sendFile(path.resolve(__dirname, "../public/posts.html"));
     }
@@ -25,15 +42,14 @@ router.post("/loginForm", (req, res) => {
 router.get("/posts", (req, res) => {
   pool.query("SELECT * FROM posts", (err, result) => {
     if (err) throw err;
-    console.log(result);
     res.json(result);
   });
 });
 router.get("/user", (req, res) => {
-  const role = req.session.role;
-  if (role == undefined) {
-    role == "anonim";
+  const permission = req.session.permission;
+  if (permission == undefined) {
+    permission == "read";
   }
-  res.json(role);
+  res.json(permission);
 });
 module.exports = router;

@@ -2,6 +2,7 @@ let test = document.getElementById("container");
 fetch("http://localhost:3000/posts")
   .then((response) => response.json())
   .then((data) => {
+    console.log(data);
     data.forEach((item) => {
       const div = document.createElement("div");
       div.setAttribute("class", "posts");
@@ -12,14 +13,15 @@ fetch("http://localhost:3000/posts")
     fetch("http://localhost:3000/user")
       .then((response) => response.json())
       .then((data2) => {
+        console.log(data2);
         const div2 = document.getElementsByClassName("posts");
         for (let i = 0; i < div2.length; i++) {
           const rules = document.createElement("div");
-          if (data2 == "administrator") {
+          if (data2 == "create") {
             rules.innerHTML = `<h2>Вы админ. Выберите действие</h2>
                               <button>Изменить</button>
                               <button>Добавить</button>`;
-          } else if (data2 == "moderator") {
+          } else if (data2 == "edit") {
             rules.innerHTML = `<h2>Вы модер. Выберите действие</h2>
                               <button>Изменить</button>`;
           } else {
@@ -29,5 +31,6 @@ fetch("http://localhost:3000/posts")
           }
           div2[i].appendChild(rules);
         }
+        console.log(data2);
       });
   });
