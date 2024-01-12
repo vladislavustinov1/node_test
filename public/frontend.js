@@ -12,12 +12,12 @@ const optionsForButtons = {
     rules.innerHTML = `<h2>Вы модер. Выберите действие</h2>
     <button>Изменить</button>`;
     return rules;
-  })(),
+  }),
   read: (function () {
     const rules = document.createElement("div");
     rules.innerHTML = "<h2>Вы обычный юзер. Читайте наши посты!</h2>";
     return rules;
-  })(),
+  }),
 };
 let test = document.getElementById("container");
 fetch("http://localhost:3000/posts")
