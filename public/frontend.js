@@ -24,7 +24,7 @@ const API_USERS = "http://localhost:3000/user";
 const test = document.getElementById("container");
 Promise.all([
   fetch(API_POSTS).then((response) => response.json()),
-  fetch("http://localhost:3000/user").then((response) => response.json()),
+  fetch(API_USERS).then((response) => response.json()),
 ])
   .then(([postAllData, userPermission]) => {
     postAllData.forEach((item) => {
